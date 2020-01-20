@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
 
@@ -51,23 +51,28 @@ export default function App() {
   }
 
   return (
-    <ScrollView>
-      <View style={styles.screen}>
-        <Header title="Guess a Number" />
-        {userNumber ? (
-          guessRounds <= 0 ? (
-            <GameScreen userChoice={userNumber} onGameOver={gameOverHandler} />
+    <SafeAreaView style={styles.screen}>
+      <ScrollView>
+        <View>
+          <Header title="Guess a Number" />
+          {userNumber ? (
+            guessRounds <= 0 ? (
+              <GameScreen
+                userChoice={userNumber}
+                onGameOver={gameOverHandler}
+              />
+            ) : (
+              <GameOverScreen
+                userNumber={1}
+                roundsNumber={1}
+                startNewGame={configureNewGameHandler}
+              />
+            )
           ) : (
-            <GameOverScreen
-              userNumber={1}
-              roundsNumber={1}
-              startNewGame={configureNewGameHandler}
-            />
-          )
-        ) : (
-          <StartGameScreen onStartGame={startGameHandler} />
-        )}
-      </View>
-    </ScrollView>
+            <StartGameScreen onStartGame={startGameHandler} />
+          )}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
