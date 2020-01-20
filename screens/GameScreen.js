@@ -83,14 +83,21 @@ const GameScreen = ({ userChoice, onGameOver }) => {
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [rounds, setRounds] = useState(0);
   const [pastGuesses, setPastGuesses] = useState([initialGuess]);
-  const [availableDeviceWidth, setAvailableDeviceWidth] = useState(
-    Dimensions.get(window).width
-  );
   const [availableDeviceHeight, setAvailableDeviceHeight] = useState(
-    Dimensions.get(window).height
+    Dimensions.get('window').height
   );
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
+
+  useEffect(() => {
+    const updateLayout = () => {
+      setAvailableDeviceHeight(Dimensions.get('window').height);
+    };
+    Dimensions.addEventListener('change', updateLayout);
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
 
   useEffect(() => {
     if (currentGuess === userChoice) {
@@ -123,7 +130,7 @@ const GameScreen = ({ userChoice, onGameOver }) => {
     setPastGuesses(curPastGuesses => [nextNumber, ...curPastGuesses]);
   };
 
-  if (Dimensions.get('window').height < 500) {
+  if (availableDeviceHeight < 500) {
     return (
       <View style={styles.screen}>
         <Text>Opponent's Guess</Text>
